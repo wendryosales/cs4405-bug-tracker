@@ -17,7 +17,8 @@ interface IssueDao {
 
 interface IssueApi {
     @GET("issues") suspend fun getIssues(): List<IssueDto>
-    @POST("issues") suspend fun create(@Body issue: IssueDto): IssueDto
+    @POST("issues") suspend fun create(@Header("Idempotency-Key") key: String,
+                                      @Body issue: IssueDto): IssueDto
     @PUT("issues/{id}") suspend fun update(@Path("id") id: Long,
                                            @Body issue: IssueDto): IssueDto
     @DELETE("issues/{id}") suspend fun delete(@Path("id") id: Long): Response<Unit>

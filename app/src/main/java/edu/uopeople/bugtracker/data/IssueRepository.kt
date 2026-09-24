@@ -24,7 +24,7 @@ class IssueRepository(
     private suspend fun push() = dao.getUnsynced().forEach { issue ->
         try {
             when (issue.syncState) {
-                PENDING_CREATE -> { val saved = api.create(issue.toDto())
+                PENDING_CREATE -> { val saved = api.create(issue.id, issue.toDto())
                     dao.upsert(issue.copy(remoteId = saved.id, syncState = SYNCED)) }
                 PENDING_UPDATE -> { api.update(issue.remoteId!!, issue.toDto())
                     dao.upsert(issue.copy(syncState = SYNCED)) }
